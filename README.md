@@ -90,18 +90,18 @@ Performance under **structure-based splits** across 12 downstream tasks:
 
 | Task | Metric | ESM3ST | ProtDiS (ours) |
 |------|--------|------|----------------|
-| Enzyme Class (EC) | acc | 0.7869 ± .0250 | **0.8345 ± .0168** |
-| GO-MF | fmax | 0.6112 ± .0100 | **0.6123 ± .0106** |
-| GO-BP | fmax | 0.4026 ± .0101 | **0.4046 ± .0061** |
-| GO-CC | fmax | 0.4623 ± .0113 | **0.4707 ± .0072** |
-| Pfam | acc | 0.5885 ± .0089 | **0.5948 ± .0147** |
-| SCOP-family | acc | 0.7502 ± .0045 | **0.7795 ± .0033** |
-| SCOP-class | acc | 0.8614 ± .00121 | **0.8662 ± .0125** |
-| SCOP-clan | acc | 0.9461 ± .0057 | **0.9601 ± .0058** |
-| Structure Similarity | spearmanr | 0.6666 ± .0064 | **0.6692 ± .0053** |
-| Ligand Affinity* | spearmanr | 0.3508 ± .0140 | **0.3664 ± .0212** |
-| PPIs* | auroc | 0.8210 ± .0071 | **0.8461 ± .0047** |
-| Ligand Binding Site | mcc | 0.6166 ± .0162 | **0.6232 ± .0118** |
+| Enzyme Class (EC) | acc | 0.7869 | **0.8345** |
+| GO-MF | fmax | 0.6112 | **0.6123** |
+| GO-BP | fmax | 0.4026 | **0.4046** |
+| GO-CC | fmax | 0.4623 | **0.4707** |
+| Pfam | acc | 0.5885 | **0.5948** |
+| SCOP-family | acc | 0.7502 | **0.7795** |
+| SCOP-class | acc | 0.8614 | **0.8662** |
+| SCOP-clan | acc | 0.9461 | **0.9601** |
+| Structure Similarity | spearmanr | 0.6666 | **0.6692** |
+| Ligand Affinity* | spearmanr | 0.3508 | **0.3664** |
+| PPIs* | auroc | 0.8210 | **0.8461** |
+| Ligand Binding Site | mcc | 0.6166 | **0.6232** |
 
 ------
 
@@ -125,5 +125,6 @@ For questions, please contact:
 ------
 
 ## 📄 License
+
 
 This project is licensed under the MIT License. See `LICENSE` for more details.
