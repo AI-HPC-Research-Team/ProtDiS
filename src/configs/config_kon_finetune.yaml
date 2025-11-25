@@ -1,0 +1,78 @@
+model:
+  module: src.models.kon
+  class: KON
+  params:
+    d_model: 256
+    c_layers: 
+      - 4 #8
+      - 12
+    k_layers: 
+      - 12
+      - 16
+      - 20
+      - 12
+      - 20
+      - 20
+      - 16
+      - 16
+    common_dims: 
+      - 128
+      - 16
+    feature_dims:
+      - 8
+      - 16
+      - 22
+      - 12
+      - 22
+      - 20
+      - 12
+      - 16
+    discrete_labels:
+      - ss
+      # - lp
+      # - entropy
+    class_weight: true
+    lambda_adv: 0.5
+    lambda_kl: 0.5
+    redundancy_reduction: decorrelation
+    lambda_var: 0.1
+    lambda_cov: 1.0
+    use_noise: false
+    lambda_mi: 0.0
+    mi_temp: 0.2
+
+dataset:
+  module: src.datasets.pretrain
+  class: PretrainDataset
+  params:
+    pdb_roots: 
+      #- "data/pdb/"
+      #- "data/alphafolddb/"
+      - "data/CATHv44-S40"
+    max_nodes: null
+    lazy: false
+
+training:
+  batch_size: 24
+  max_lr: 1e-4
+  num_epochs: 200
+  warmup_steps: 1000 # learning rate warmup
+  decay_epochs: 100 # learning rate decay
+  decay_rate: 0.1
+  adv_start_epoch: -1 # lambda warmup
+  adv_warmup_epochs: 1 # lambda warmup
+  adv_lr_scale: 5.0 # scale for adversarial branches
+  grad_clip: 5.0
+  monitor:
+    - "ss_loss"
+    - "asa_loss"
+    - "bfactor_loss"
+    - "lp_loss"
+    - "hydro_loss"
+    - "stability_loss"
+    - "entropy_loss"
+    - "orc_loss"
+    - "restore_loss"
+  log_file: "training.log"
+  model_save_path: "model_kon.pth"
+  loss_curve_path: "loss_curve.png"
