@@ -1,0 +1,75 @@
+model:
+  target: src.models.SingleModel
+  params:
+    embed_dim: &embed_dim 32
+    d_model: &d_model 256
+    feas:
+      - seq
+      - ck
+      - ss
+      # - asa
+      # - bfactor
+      - lp
+      # - hydro
+      # - stability
+      - entropy
+      # - orc
+    input_dims:
+      - 16
+      - 8
+      # - 16
+      # - 22
+      - 12
+      # - 22
+      # - 20
+      - 12
+      # - 16
+    encoder:
+      type: gnn
+      embed_dim: *embed_dim
+      d_model: *d_model
+      n_layers: 5
+      gnn_type: gin
+      dropout: 0.2
+      use_edge_attr: False
+      pe: null
+    feature_fusion: gate
+    pooling: mean
+    task_type: 
+      - protein
+      - classification
+
+data:
+  batch_size: 24
+  workers: 8
+  train_data:
+    target: src.datasets.StructuralClass
+    params:
+      scop_level: cl
+      split_type: &split_type structure
+      redundancy: &redundancy 0.5
+      split: train
+      resolution: residue
+  valid_data:
+    target: src.datasets.StructuralClass
+    params:
+      scop_level: cl
+      split_type: *split_type
+      redundancy: *redundancy
+      split: val
+      resolution: residue
+  test_data:
+    - target: src.datasets.StructuralClass
+      params:
+        scop_level: cl
+        split_type: *split_type
+        redundancy: *redundancy
+        split: test
+        resolution: residue
+
+training:
+  epochs: 100
+  lr: 1e-3
+  weight_decay: 1e-06
+  warmup_epochs: 5
+

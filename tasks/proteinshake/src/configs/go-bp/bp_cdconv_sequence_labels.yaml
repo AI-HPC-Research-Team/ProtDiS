@@ -1,0 +1,75 @@
+model:
+  target: src.models.SingleModel
+  params:
+    embed_dim: &embed_dim 32
+    d_model: &d_model 256
+    feas:
+      - ss_label
+      - asa_label
+      - bfactor_label
+      - lp_label
+      - hydro_label
+      - stability_label
+      - entropy_label
+    encoder:
+      type: cdconv
+      geometric_radii:
+        - 8.0
+        - 12.0
+        - 16.0
+        - 20.0
+      sequential_kernel_size: 15
+      kernel_channels: 32
+      channels:
+        - 256
+        - 512
+        - 1024
+        - 2048
+      base_width: 16.0
+      embed_dim: *embed_dim
+      d_model: *d_model
+    feature_fusion: gate
+    pooling: mean
+    task_type: 
+      - protein
+      - multilabel
+
+data:
+  batch_size: 24
+  workers: 8
+  train_data:
+    target: src.datasets.GeneOntology
+    params:
+      branch: &branch bp
+      split_type: &split_type sequence
+      split: train
+      resolution: &resolution residue
+      use_annos: &use_annos true
+  valid_data:
+    target: src.datasets.GeneOntology
+    params:
+      branch: *branch
+      split_type: *split_type
+      split: val
+      resolution: *resolution
+      use_annos: *use_annos
+  test_data:
+    - target: src.datasets.GeneOntology
+      params:
+        branch: *branch
+        split_type: *split_type
+        split: test
+        resolution: *resolution
+        use_annos: *use_annos
+
+training:
+  epochs: 100
+  lr: 1e-4
+  weight_decay: 1e-06
+
+  scheduler:
+    target: torch.optim.lr_scheduler.CosineAnnealingLR
+    params:
+      T_max: 100
+      eta_min: 1e-6
+      

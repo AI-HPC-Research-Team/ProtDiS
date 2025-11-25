@@ -1,0 +1,56 @@
+model:
+  target: src.models.SingleModel
+  params:
+    embed_dim: &embed_dim 32
+    d_model: &d_model 256
+    feas:
+      #- seq
+      - s
+    input_dims:
+      - 128
+    encoder:
+      type: gnn
+      embed_dim: *embed_dim
+      d_model: *d_model
+      n_layers: 5
+      gnn_type: gin
+      dropout: 0.2
+      use_edge_attr: False
+      pe: null
+    feature_fusion: gate
+    pooling: mean
+    task_type: 
+      - protein
+      - multilabel
+
+data:
+  batch_size: 64
+  workers: 8
+  train_data:
+    target: src.datasets.GeneOntology
+    params:
+      branch: &branch mf
+      split_type: &split_type structure
+      split: train
+      resolution: residue
+  valid_data:
+    target: src.datasets.GeneOntology
+    params:
+      branch: *branch
+      split_type: *split_type
+      split: val
+      resolution: residue
+  test_data:
+    - target: src.datasets.GeneOntology
+      params:
+        branch: *branch
+        split_type: *split_type
+        split: test
+        resolution: residue
+
+training:
+  epochs: 100
+  lr: 1e-3
+  weight_decay: 1e-06
+  warmup_epochs: 5
+      

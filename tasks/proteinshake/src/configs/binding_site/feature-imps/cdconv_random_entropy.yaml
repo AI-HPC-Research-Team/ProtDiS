@@ -1,0 +1,61 @@
+model:
+  target: src.models.SingleModel
+  params:
+    embed_dim: &embed_dim 32
+    d_model: &d_model 128
+    feas:
+      - entropy
+    input_dims:
+      - 12
+    encoder:
+      type: cdconv
+      geometric_radii:
+        - 8.0
+        - 12.0
+        - 16.0
+        - 20.0
+      sequential_kernel_size: 15
+      kernel_channels: 32
+      channels:
+        - 128
+        - 128
+        - 128
+        - 128
+      base_width: 16.0
+      embed_dim: *embed_dim
+      d_model: *d_model
+      pooling: null
+    pooling: null
+    feature_fusion: gate
+    task_type:
+      - residue
+      - binary
+
+data:
+  batch_size: 4
+  workers: 8
+  train_data:
+    target: src.datasets.BindingSite
+    params:
+      split_type: &split_type random
+      split: train
+      resolution: residue
+  valid_data:
+    target: src.datasets.BindingSite
+    params:
+      split_type: *split_type
+      split: val
+      resolution: residue
+  test_data:
+    - target: src.datasets.BindingSite
+      params:
+        split_type: *split_type
+        split: test
+        resolution: residue
+
+training:
+  epochs: 50
+  lr: 1e-3
+  weight_decay: 1e-06
+  metrics:
+    - mcc

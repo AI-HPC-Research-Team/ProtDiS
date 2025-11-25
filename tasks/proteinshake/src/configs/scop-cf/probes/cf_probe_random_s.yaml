@@ -1,0 +1,43 @@
+model:
+  target: src.models.ProbeModel
+  params:
+    d_model: &d_model 128
+    layers: 5
+    input_encs:
+      - s
+    input_dims:
+      - 128
+    pooling: mean
+    task_type: 
+      - protein
+      - classification
+
+data:
+  batch_size: 24
+  workers: 8
+  train_data:
+    target: src.datasets.StructuralClass
+    params:
+      scop_level: cf
+      split_type: &split_type random
+      split: train
+      resolution: residue
+  valid_data:
+    target: src.datasets.StructuralClass
+    params:
+      scop_level: cf
+      split_type: *split_type
+      split: val
+      resolution: residue
+  test_data:
+    - target: src.datasets.StructuralClass
+      params:
+        scop_level: cf
+        split_type: *split_type
+        split: test
+        resolution: residue
+
+training:
+  epochs: 50
+  lr: 1e-3
+  weight_decay: 5e-4

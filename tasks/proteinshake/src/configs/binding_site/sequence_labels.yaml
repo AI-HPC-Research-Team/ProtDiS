@@ -1,0 +1,59 @@
+model:
+  target: src.models.SingleModel
+  params:
+    embed_dim: &embed_dim 32
+    d_model: &d_model 128
+    feas:
+      - ss_label
+      - asa_label
+      - bfactor_label
+      - lp_label
+      - hydro_label
+      - stability_label
+      - entropy_label
+    encoder:
+      type: gnn
+      n_layers: 5
+      embed_dim: *embed_dim
+      d_model: *d_model
+      gnn_type: gin
+      dropout: 0.2
+      use_edge_attr: False
+      pe: null
+    feature_fusion: gate
+    task_type:
+      - residue
+      - binary
+
+data:
+  batch_size: 64
+  workers: 4
+  train_data:
+    target: src.datasets.BindingSite
+    params:
+      split_type: &split_type sequence
+      split: train
+      resolution: residue
+      use_annos: &use_annos true
+  valid_data:
+    target: src.datasets.BindingSite
+    params:
+      split_type: *split_type
+      split: val
+      resolution: residue
+      use_annos: *use_annos
+  test_data:
+    - target: src.datasets.BindingSite
+      params:
+        split_type: *split_type
+        split: test
+        resolution: residue
+        use_annos: *use_annos
+
+training:
+  epochs: 100
+  lr: 1e-3
+  weight_decay: 1e-06
+  metrics:
+    - mcc
+  warmup_epochs: 5

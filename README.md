@@ -117,7 +117,9 @@ Performance under **structure-based splits** across 12 downstream tasks:
 For questions, please contact:
 
 **Mingqing Wang**
+
  Ph.D. Student in Protein Representation Learning
+ 
  Email: wmq23@mails.tsinghua.edu.cn
 
 ------

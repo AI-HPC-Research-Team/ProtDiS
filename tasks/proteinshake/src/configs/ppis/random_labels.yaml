@@ -1,0 +1,63 @@
+model:
+  target: src.models.SingleModel
+  params:
+    embed_dim: &embed_dim 32
+    d_model: &d_model 128
+    feas:
+      - ss_label
+      - asa_label
+      - bfactor_label
+      - lp_label
+      - hydro_label
+      - stability_label
+      - entropy_label
+    encoder:
+      type: gnn
+      n_layers: 5
+      embed_dim: *embed_dim
+      d_model: *d_model
+      gnn_type: gin
+      dropout: 0.2
+      use_edge_attr: False
+      pe: null
+    feature_fusion: gate
+    task_type: 
+      - residue_pair
+      - binary
+
+data:
+  batch_size: 2
+  workers: 8
+  train_data:
+    target: src.datasets.ProteinProteinInterface
+    params:
+      split_type: &split_type random
+      split: train
+      resolution: residue
+      use_annos: &use_annos true
+  valid_data:
+    target: src.datasets.ProteinProteinInterface
+    params:
+      split_type: *split_type
+      split: val
+      resolution: residue
+      use_annos: *use_annos
+  test_data:
+    - target: src.datasets.ProteinProteinInterface
+      params:
+        split_type: *split_type
+        split: test
+        resolution: residue
+        use_annos: *use_annos
+
+training:
+  epochs: 50
+  lr: 1e-3
+  weight_decay: 1e-06
+  metrics:
+    - auroc
+  scheduler:
+    target: torch.optim.lr_scheduler.CosineAnnealingLR
+    params:
+      T_max: 100
+      eta_min: 1e-6

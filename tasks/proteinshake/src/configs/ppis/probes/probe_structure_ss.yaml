@@ -1,0 +1,41 @@
+model:
+  target: src.models.ProbeModel
+  params:
+    d_model: &d_model 128
+    layers: 5
+    input_encs:
+      - ss
+    input_dims:
+      - 8
+    task_type: 
+      - residue_pair
+      - binary
+
+data:
+  batch_size: 24
+  workers: 8
+  train_data:
+    target: src.datasets.ProteinProteinInterface
+    params:
+      split_type: &split_type structure
+      split: train
+      resolution: residue
+  valid_data:
+    target: src.datasets.ProteinProteinInterface
+    params:
+      split_type: *split_type
+      split: val
+      resolution: residue
+  test_data:
+    - target: src.datasets.ProteinProteinInterface
+      params:
+        split_type: *split_type
+        split: test
+        resolution: residue
+
+training:
+  epochs: 50
+  lr: 1e-3
+  weight_decay: 5e-4
+  metrics:
+    - auroc

@@ -1,0 +1,22 @@
+{
+    // 隐藏不必要的数据目录/文件
+    "files.exclude": {
+      //"data/**": true,
+      "**/__pycache__": true,
+    },
+
+    // 搜索时跳过这些文件夹，提高速度
+    "search.exclude": {
+      "data/**": true,
+      "kernel_meta/**": true,
+      "outputs/**": true,
+      "**/*.log": true
+    },
+  
+    // 禁用对这些目录的文件监视（防止 CPU 飙升）
+    "files.watcherExclude": {
+      "data/**": true,
+      "**/tmp/**": true
+    },
+  }
+  
